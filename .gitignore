@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# TypeScript
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Logs
+logs
+*.log
+logs/*
+debug.log
+
+# Env files
+.env
+.env.* 
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Optional (если используешь docker или временные файлы)
+docker-compose.override.yml
+.tmp/
+
+# зависимости Node.js
+node_modules/
