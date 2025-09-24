@@ -2,6 +2,9 @@ import { Bot } from "grammy";
 import * as dotenv from "dotenv";
 import { pool } from "./db.ts";
 import { mesCommand, idCommand } from "./commands/mes.ts";
+import { setupRandomCommand } from "./commands/random.ts";
+import { setupHelpCommand } from "./commands/help.ts";
+
 dotenv.config();
 
 const bot = new Bot(process.env.BOT_TOKEN!);
@@ -43,7 +46,13 @@ bot.on("message", async (ctx, next) => {
 // Регистрируем команду /mes
 bot.command("mes", mesCommand);
 
-// Команда /id
+// Регистрируем команду /id
 bot.command("id", idCommand);
+
+// Регистрируем команду /random
+setupRandomCommand(bot);
+
+// Регистрируем команду /help
+setupHelpCommand(bot); 
 
 bot.start().then(() => console.log("Бот успешно запущен!"));
