@@ -1,4 +1,4 @@
-import { Bot } from "grammy";
+import { Bot, Context } from "grammy";
 import * as dotenv from "dotenv";
 import { pool } from "./db.ts";
 import { mesCommand, idCommand } from "./commands/mes.ts";
@@ -9,50 +9,56 @@ dotenv.config();
 
 const bot = new Bot(process.env.BOT_TOKEN!);
 
-// Сохраняем комментарии в БД
-bot.on("message", async (ctx, next) => {
-  if (!ctx.message || !ctx.from) return;
-
-  // Определяем postId для комментариев в треде
-  const postId = ctx.message.message_thread_id || null; // null для обычных сообщений
-
-  try {
-    await pool.query(
-      `INSERT INTO comments (post_id, message_id, user_id, username, text, date)
-       VALUES ($1, $2, $3, $4, $5, to_timestamp($6)) ON CONFLICT DO NOTHING`,
-      [
-        postId,
-        ctx.message.message_id,
-        ctx.from.id,
-        ctx.from.username || ctx.from.first_name,
-        ctx.message.text ?? ctx.message.caption ?? "",
-        ctx.message.date,
-      ]
-    );
-
-    if (postId) {
-      console.log(`Сохранили комментарий ${ctx.message.message_id} для поста ${postId}`);
-    } else {
-      console.log(`Сохранили обычное сообщение ${ctx.message.message_id}`);
+bot.command("start", async (ctx: Context) => {
+    await ctx.reply(`Я тут!`);
+    // Попытка удалить команду пользователя через 1 секунду
+  setTimeout(async () => {
+    try {
+      await ctx.deleteMessage();
+    } catch (err) {
+      console.error("Не удалось удалить сообщение:", err);
     }
-  } catch (err) {
-    console.error("Ошибка при вставке сообщения в БД:", err);
-  }
+  }, 3000);
+  });
 
-  await next();
-});
-
-
-// Регистрируем команду /mes
+// 1 Регистрируем команды
+setupHelpCommand(bot);
 bot.command("mes", mesCommand);
-
-// Регистрируем команду /id
 bot.command("id", idCommand);
-
-// Регистрируем команду /random
 setupRandomCommand(bot);
 
-// Регистрируем команду /help
-setupHelpCommand(bot); 
+// 2 Middleware для логирования сообщений
+bot.on("message", async (ctx, next) => {
+  if (!ctx.message || !ctx.from) return await next();
 
+  const postId = ctx.message.message_thread_id || null;
+
+  // проверяем текстовое содержимое
+  const text = ctx.message.text ?? ctx.message.caption ?? "";
+  const isCommand = text.startsWith("/");
+
+  // вставляем в БД только обычные сообщения (не команды)
+  if (!isCommand) {
+    try {
+      await pool.query(
+        `INSERT INTO comments (post_id, message_id, user_id, username, text, date)
+         VALUES ($1, $2, $3, $4, $5, to_timestamp($6)) ON CONFLICT DO NOTHING`,
+        [
+          postId,
+          ctx.message.message_id,
+          ctx.from.id,
+          ctx.from.username || ctx.from.first_name,
+          text,
+          ctx.message.date,
+        ]
+      );
+    } catch (err) {
+      console.error("Ошибка при вставке сообщения:", err);
+    }
+  }
+
+  await next(); // обязательно
+});
+
+// 3 Запускаем бота
 bot.start().then(() => console.log("Бот успешно запущен!"));
