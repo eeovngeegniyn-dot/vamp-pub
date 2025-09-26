@@ -11,7 +11,7 @@ export function setupRandomCommand(bot: Bot) {
      const userId = ctx.from?.id;
     if (!userId) return;
 
-    const key = `${userId}:help`;
+    const key = `${userId}:random`;
     const now = Date.now();
 
     if (commandCooldowns.has(key)) {

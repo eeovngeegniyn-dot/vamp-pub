@@ -4,8 +4,10 @@ const commandCooldowns = new Map<string, number>(); // ключ — `${userId}:$
 
 // функция для регистрации команды /help
 export function setupHelpCommand(bot: Bot) {
+  console.log(`Команда help ещё не вызвана`);
   // Через стандартный command
   bot.command("help", async (ctx: Context) => {
+    console.log(`Вызвана команда help от пользователя ${ctx.from?.username}`);
     const userId = ctx.from?.id;
     if (!userId) return;
 
@@ -25,19 +27,19 @@ export function setupHelpCommand(bot: Bot) {
     commandCooldowns.set(key, now);
 
     await ctx.reply(`Вы вызвали команду /help\n
-Вам доступны следующие команды:\n
-/random - рандомный выбор среди количества указанных участников(минимальное значение по умолчанию указано 1)\n
-/id - просмотр собственного id, username и id текущего чата, а также статистики активности\n
-/id @username/id - просмотр id, username и id текущего чата указанного пользователя\n\n
-Если вы администратор, то нажмите кнопку ниже для получения доступа к командам.\n\n
-Если у вас остались вопросы, то напишите @eovngeegniyn`, {
+      Вам доступны следующие команды:\n
+      /random - рандомный выбор среди количества указанных участников(минимальное значение по умолчанию указано 1)\n
+      /id - просмотр собственного id, username и id текущего чата, а также статистики активности\n
+      /id @username/id - просмотр id, username и id текущего чата указанного пользователя\n\n
+      Если вы администратор, то нажмите кнопку ниже для получения доступа к командам администратора.\n\n
+      Если у вас остались вопросы, то напишите @eovngeegniyn`, {
       reply_markup: {
         inline_keyboard: [
           [{ text: "Для админов", callback_data: "admin_button" }],
         ],
       },
     });
-    // Попытка удалить команду пользователя через 1 секунду
+    // Попытка удалить команду пользователя
   setTimeout(async () => {
     try {
       await ctx.deleteMessage();
@@ -78,6 +80,5 @@ bot.callbackQuery("admin_button", async (ctx) => {
     console.error("Ошибка при проверке админа:", err);
   }
 });
-
 
 }

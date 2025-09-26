@@ -33,15 +33,8 @@ export function setupMessageLogger(bot: Bot) {
 }
 // Обработчик команды /mes
 export async function mesCommand(ctx: Context) {
-    setTimeout(async () => {
-      try {
-        await ctx.deleteMessage();
-      } catch (err) {
-        console.error("Не удалось удалить сообщение:", err);
-      }
-    }, 3000);
   if (!ctx.from) return;
-
+  
   // Проверка администратора
   const member = await ctx.getChatMember(ctx.from.id);
   if (!["creator", "administrator"].includes(member.status)) {
@@ -97,13 +90,6 @@ export async function mesCommand(ctx: Context) {
 
 //команда /id
 export async function idCommand(ctx: Context) {
-    setTimeout(async () => {
-      try {
-        await ctx.deleteMessage();
-      } catch (err) {
-        console.error("Не удалось удалить сообщение:", err);
-      }
-    }, 3000);
   if (!ctx.from) return;
   if (!ctx.chat) return ctx.reply("Не удалось определить чат.");
 
