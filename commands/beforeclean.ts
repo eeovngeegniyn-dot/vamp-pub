@@ -13,7 +13,7 @@ export function setupBeforeCleanCommand(bot: Bot) {
     }
 
     if (!ctx.chat || (ctx.chat.type !== "group" && ctx.chat.type !== "supergroup")) {
-      await ctx.reply("Эту команду можно использовать только в группах.");
+      await ctx.reply("Эту команду можно использовать только в группах.[beforeclean]");
       return;
     }
 

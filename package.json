@@ -6,7 +6,7 @@
   "main": "main.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch './*.ts' --exec 'node --loader ts-node/esm main.ts'"
+    "dev": "nodemon --watch \"**/*.ts\" --exec \"node --loader ts-node/main.ts\""
   },
   "keywords": [],
   "author": "",

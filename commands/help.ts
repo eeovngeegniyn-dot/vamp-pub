@@ -4,7 +4,6 @@ const commandCooldowns = new Map<string, number>(); // ключ — `${userId}:$
 
 // функция для регистрации команды /help
 export function setupHelpCommand(bot: Bot) {
-  console.log(`Команда help ещё не вызвана`);
   // Через стандартный command
   bot.command("help", async (ctx: Context) => {
     console.log(`Вызвана команда help от пользователя ${ctx.from?.username}`);

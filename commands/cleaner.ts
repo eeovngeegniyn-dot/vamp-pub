@@ -39,7 +39,7 @@ export function setupCleanCommand(bot: Bot) {
     }
 
     if (!ctx.chat || (ctx.chat.type !== "group" && ctx.chat.type !== "supergroup")) {
-      await ctx.reply("Эту команду можно использовать только в группах.");
+      await ctx.reply("Эту команду можно использовать только в группах.[cleaner]");
       return;
     }
 
@@ -90,9 +90,9 @@ export function setupCleanCommand(bot: Bot) {
   bot.command("clean", handler);
 
   // fallback: если команда в группе пришла как plain-text (в некоторых случаях)
-  bot.on("message:text", async (ctx) => {
+  bot.on("message:text", async (ctx, next) => {
     const text = ctx.msg?.text?.trim() ?? "";
-    if (!text) return;
+    if (!text) return next();
 
     // в группе: /clean или /clean@BotUsername
     if (ctx.chat?.type !== "private") {
@@ -101,6 +101,8 @@ export function setupCleanCommand(bot: Bot) {
         await handler(ctx);
       }
     }
+
+    return next()
   });
 
   console.log("[cleaner] registration done");
