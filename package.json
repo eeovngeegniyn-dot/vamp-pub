@@ -1,27 +1,32 @@
 {
-  "name": "vampproject",
+  "name": "vampir_bot",
   "version": "1.0.0",
-  "description": "",
-  "type": "module",
-  "main": "main.ts",
+  "description": "Telegram bot to display chat users",
+  "main": "dist/bot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --watch './*.ts' --exec 'node --loader ts-node/esm main.ts'"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@types/node": "^24.3.3",
-    "@types/pg": "^8.15.5",
-    "nodemon": "^3.1.10",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "dev": "nodemon --exec ts-node src/bot.ts",
+    "start": "ts-node src/bot.ts",
+    "build": "tsc",
+    "serve": "node dist/bot.js"
   },
   "dependencies": {
-    "dotenv": "^17.2.2",
+    "dotenv": "^16.4.5",
     "grammy": "^1.38.2",
-    "pg": "^8.16.3"
-  }
+    "prompt-sync": "^4.2.0",
+    "telegraf": "^4.16.3",
+    "telegram": "^2.26.22"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.17",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "keywords": [
+    "telegram",
+    "bot",
+    "typescript"
+  ],
+  "author": "",
+  "license": "ISC"
 }
