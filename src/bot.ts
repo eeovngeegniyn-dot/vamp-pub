@@ -3,6 +3,8 @@ import { TelegramClient } from "telegram";
 import { StringSession } from "telegram/sessions/StringSession.js";
 import promptSync from "prompt-sync";
 import * as dotenv from "dotenv";
+import { setupStartCommand } from "./commands/start";
+import { setupAppCommand } from "./commands/app";
 
 dotenv.config();
 const prompt = promptSync();
@@ -35,6 +37,11 @@ async function initMTProto() {
 // --------------------
 const bot = new Telegraf(process.env.BOT_TOKEN!);
 
+// --------------------
+// Registred Commands
+// --------------------
+setupStartCommand(bot);
+setupAppCommand(bot);
 
 // --------------------
 // /users Command
